@@ -1,0 +1,43 @@
+<h2>Analytics (Admin Only)</h2>
+
+<select id="event"></select><br><br>
+
+<button onclick="load()">Get Analytics</button>
+
+<p id="result"></p>
+
+<script>
+
+const role = localStorage.getItem("role");
+
+if(role !== "admin"){
+  alert("Access denied! Admin only.");
+  window.location.href = "index.html";
+}
+
+async function loadEvents(){
+  const res = await fetch("http://localhost:3000/events");
+  const data = await res.json();
+
+  const select = document.getElementById("event");
+
+  data.forEach(e=>{
+    const op = document.createElement("option");
+    op.value = e.event_id;
+    op.text = e.title;
+    select.appendChild(op);
+  });
+}
+
+async function load(){
+  const id = document.getElementById("event").value;
+
+  const res = await fetch(`http://localhost:3000/analytics/${id}`);
+  const data = await res.json();
+
+  document.getElementById("result").innerText =
+    `Total Submissions: ${data[0][0].total_submissions}`;
+}
+
+loadEvents();
+</script>

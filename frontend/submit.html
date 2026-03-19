@@ -1,0 +1,50 @@
+<h2>Submit Response</h2>
+
+<select id="event"></select><br><br>
+<select id="user"></select><br><br>
+
+<button onclick="submit()">Submit</button>
+
+<script>
+async function loadData(){
+
+  const events = await fetch("http://localhost:3000/events");
+  const eData = await events.json();
+
+  const users = await fetch("http://localhost:3000/events/users");
+  const uData = await users.json();
+
+  const eSelect = document.getElementById("event");
+  const uSelect = document.getElementById("user");
+
+  eData.forEach(e=>{
+    const op = document.createElement("option");
+    op.value = e.event_id;
+    op.text = e.title;
+    eSelect.appendChild(op);
+  });
+
+  uData.forEach(u=>{
+    const op = document.createElement("option");
+    op.value = u.user_id;
+    op.text = u.name;
+    uSelect.appendChild(op);
+  });
+
+}
+
+async function submit(){
+  const user = document.getElementById("user").value;
+  const event = document.getElementById("event").value;
+
+  await fetch("http://localhost:3000/submit",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({user_id:user,event_id:event})
+  });
+
+  alert("Submitted!");
+}
+
+loadData();
+</script>

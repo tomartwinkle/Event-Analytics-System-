@@ -1,0 +1,25 @@
+<h1>Event Analytics System</h1>
+
+<h3>Select Role:</h3>
+
+<select id="role">
+  <option value="admin">Admin</option>
+  <option value="participant">Participant</option>
+</select><br><br>
+
+<button onclick="go()">Continue</button>
+
+<script>
+function go(){
+  const role = document.getElementById("role").value;
+
+  // save role temporarily
+  localStorage.setItem("role", role);
+
+  if(role === "admin"){
+    window.location.href = "create_event.html";
+  } else {
+    window.location.href = "submit.html";
+  }
+}
+</script>

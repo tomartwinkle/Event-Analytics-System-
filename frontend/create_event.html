@@ -1,0 +1,43 @@
+<h2>Create Event</h2>
+
+<input id="title" placeholder="Event Title"><br><br>
+<input id="deadline" type="date"><br><br>
+
+<select id="user"></select><br><br>
+
+<button onclick="createEventHandler()">Create</button>
+
+<p id="msg"></p>
+
+<script>
+async function loadUsers(){
+  const res = await fetch("http://localhost:3000/events/users");
+  const users = await res.json();
+
+  const select = document.getElementById("user");
+
+  users.forEach(u => {
+    const option = document.createElement("option");
+    option.value = u.user_id;
+    option.text = u.name;
+    select.appendChild(option);
+  });
+}
+
+async function createEventHandler(){
+  const title = document.getElementById("title").value;
+  const deadline = document.getElementById("deadline").value;
+  const user = document.getElementById("user").value;
+
+  const res = await fetch("http://localhost:3000/events/create", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ title, deadline, created_by: user })
+  });
+
+  const data = await res.text();
+  document.getElementById("msg").innerText = data;
+}
+
+loadUsers();
+</script>
